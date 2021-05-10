@@ -1,0 +1,5 @@
+/lib
+/vendor
+/app/config/prd_communication.ini
+/app/config/prd_log.ini
+/app/config/prd_permission.ini
