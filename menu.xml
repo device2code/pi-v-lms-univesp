@@ -1,5 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <menu>
+  <menuitem label="Responder">
+    <icon>fas:pen-fancy fa-fw</icon>
+    <menu>
+      <menuitem label="Quiz">
+        <action>Quiz</action>
+        <icon>fas:angle-double-right fa-fw</icon>
+      </menuitem>
+    </menu>
+  </menuitem>
   <menuitem label="Perguntas">
     <icon>fas:book fa-fw</icon>
     <menu>
