@@ -4,7 +4,7 @@ return [
     'port'  =>  "3306",
     'name'  =>  "lms_piv",
     'user'  =>  "root",
-    'pass'  =>  "Scherrer!!80",
+    'pass'  =>  "password",
     'type'  =>  "mysql",
     'prep'  =>  "1",
     'slog'  => "SystemSqlLogService"

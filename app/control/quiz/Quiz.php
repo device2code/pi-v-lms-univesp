@@ -9,6 +9,7 @@ use Adianti\Control\TPage;
 use Adianti\Widget\Container\TVBox;
 use Adianti\Control\TAction;
 use Adianti\Widget\Form\THidden;
+use Adianti\Widget\Util\TImage;
 
 
 class Quiz extends TPage
@@ -23,7 +24,7 @@ class Quiz extends TPage
         // creates the form
         $this->form = new BootstrapFormBuilder('form_Quiz');
         $this->form->setFormTitle('Quiz | Responda às Questões abaixo e clique no botão ENVIAR');
-        $this->form->setFieldSizes('100%');
+//        $this->form->setFieldSizes('100%');
 
         $this->getListQuestions();
 
@@ -40,13 +41,13 @@ class Quiz extends TPage
             TTransaction::open('communication');
 
             $question_type = [
-                1 => Question::where('subject_id', '=', '1')->getIndexedArray('id'),
-                2 => Question::where('subject_id', '=', '2')->getIndexedArray('id'),
-                3 => Question::where('subject_id', '=', '3')->getIndexedArray('id'),
-                4 => Question::where('subject_id', '=', '4')->getIndexedArray('id'),
-                5 => Question::where('subject_id', '=', '5')->getIndexedArray('id'),
-                6 => Question::where('subject_id', '=', '6')->getIndexedArray('id'),
-                7 => Question::where('subject_id', '=', '7')->getIndexedArray('id'),
+                1 => Question::where('subject_id', '=', '1')->where('image', 'IS',NULL)->getIndexedArray('id'),
+                2 => Question::where('subject_id', '=', '2')->where('image', 'IS',NULL)->getIndexedArray('id'),
+                3 => Question::where('subject_id', '=', '3')->where('image', 'IS',NULL)->getIndexedArray('id'),
+                4 => Question::where('subject_id', '=', '4')->where('image', 'IS',NULL)->getIndexedArray('id'),
+                5 => Question::where('subject_id', '=', '5')->where('image', 'IS',NULL)->getIndexedArray('id'),
+                6 => Question::where('subject_id', '=', '6')->where('image', 'IS',NULL)->getIndexedArray('id'),
+                7 => Question::where('subject_id', '=', '7')->where('image', 'IS',NULL)->getIndexedArray('id'),
             ];
 
             $questoes_id = $this->getQuestionsFromArray($question_type);
@@ -153,6 +154,7 @@ class Quiz extends TPage
 
         foreach ($questions_to_answer as $key => $value) {
             $question = "q_{$key}";
+            $image = "i_{$key}";
             $alternative = "r_{$key}";
             $correct = "c_{$key}";
             $level = "l_{$key}";
@@ -160,6 +162,11 @@ class Quiz extends TPage
             $this->form->appendPage("Questão {$key} ");
 
             $$question = new TLabel($value["description"]);
+            if (!empty($value['image'])) {
+                $$image = new TImageCropper($image);
+                $$image->setSize('100%','150');
+                $$image->src = $value['image'];
+            }
             $$alternative = new TRadioGroup($alternative);
             $$alternative->addItems(['A' => $value['A'], 'B' => $value['B'], 'C' => $value['C'], 'D' => $value['D'], 'E' => $value['E']]);
             $$correct = new THidden($correct);
@@ -168,6 +175,7 @@ class Quiz extends TPage
             $$level->setValue($value['level']);
 
             $this->form->addFields([$$question]);
+            $this->form->addFields([$$image]);
             $this->form->addFields([$$alternative]);
             $this->form->addFields([$$correct]);
             $this->form->addFields([$$level]);
@@ -190,13 +198,12 @@ class Quiz extends TPage
             $c = "c_{$i}";
             $l = "l_{$i}";
 
-            $max += $data->$l;
+            $max += (int) $data->$l;
 
             if ($data->$r == $data->$c)
-                $resultado += $data->$l;
+                $resultado += (int) $data->$l;
         }
 
         new \Adianti\Widget\Dialog\TMessage('info', "Você atingiu a pontuação de <b>" . $resultado . "</b> sendo <b>" . $max . "</b> a pontuação máxima");
-//        echo $resultado . ' ' . $max;
     }
 }
